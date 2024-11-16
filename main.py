@@ -9,8 +9,10 @@ with open('flashcard.json', 'r') as file:
 # Initialize the failed requests list (if it exists, load it)
 try:
     with open('failed_requests.json', 'r') as failed_file:
-        failed_requests = json.load(failed_file)
-except FileNotFoundError:
+        # Attempt to load the failed requests, handle case where file is empty or invalid
+        failed_requests = json.load(failed_file) if failed_file.read().strip() else []
+except (FileNotFoundError, json.JSONDecodeError):
+    # If the file doesn't exist or contains invalid JSON, initialize an empty list
     failed_requests = []
 
 headers = {
